@@ -184,13 +184,9 @@ document.querySelectorAll('.project-embed').forEach(details => {
     const text = word.textContent; word.textContent = ''; word.setAttribute('aria-hidden', 'true');
     [...text].forEach(ch => { const s = document.createElement('span'); s.className = 'ho-char'; s.textContent = ch; s.style.setProperty('--i', i++); word.append(s); });
   });
-  let userPaused = false;
-  const sync = () => { btn.textContent = video.paused ? 'Play' : 'Pause'; btn.setAttribute('aria-pressed', String(video.paused)); };
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { video.removeAttribute('autoplay'); video.pause(); userPaused = true; }
-  btn.addEventListener('click', () => { if (video.paused) { userPaused = false; video.play().catch(() => {}); } else { userPaused = true; video.pause(); } });
-  video.addEventListener('play', sync); video.addEventListener('pause', sync);
+  // Always playing, always looping. Only the system's reduced-motion setting keeps it on the poster.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { video.removeAttribute('autoplay'); video.pause(); }
+  else { video.loop = true; const go = () => video.play().catch(() => {}); go(); video.addEventListener('ended', () => { video.currentTime = 0; go(); }); }
   const header = () => document.body.classList.toggle('past-film', hero.getBoundingClientRect().bottom < 72);
   addEventListener('scroll', header, { passive: true }); addEventListener('resize', header); header();
-  if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { if (userPaused) return; e.isIntersecting ? video.play().catch(() => {}) : video.pause(); }).observe(hero);
-  sync();
 })();

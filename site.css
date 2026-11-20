@@ -719,3 +719,9 @@ p, .hero-intro, .work-summary, .article-deck { text-wrap: pretty; }
   .archive-item { padding-block: 24px; }
   .hero-over { padding-bottom: 24px; }
 }
+/* Everything on the film is white, on every screen size. */
+.home-page .home-hero.has-film, .home-page .home-hero.has-film :is(.hero-name, .hf-intro) { color: #fff; }
+.home-page .home-hero.has-film .hf-role { color: #ffffffc7; }
+.home-page:not(.past-film) .site-header :is(a, button, .brand, .mobile-work, .menu-toggle) { color: #fff; }
+.home-page:not(.past-film) .site-nav .nav-secondary:not([aria-current]) { color: #ffffffc7; }
+@media (max-width: 900px) { .hf-intro { grid-column: 1 / -1; } }
