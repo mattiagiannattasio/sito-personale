@@ -152,3 +152,22 @@ document.querySelectorAll('.project-embed').forEach(details => {
   set(saved);
   toggle.addEventListener('click', e => { const b = e.target.closest('button'); if (b) set(b.dataset.view); });
 })();
+
+// Word fill: split the statement into words so each can take ink in reading order.
+(() => {
+  document.querySelectorAll('.word-fill').forEach(root => {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+    const words = [];
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.append(part); return; }
+        const s = document.createElement('span'); s.className = 'wf'; s.textContent = part; words.push(s); frag.append(s);
+      });
+      node.replaceWith(frag);
+    });
+    words.forEach((w, i) => w.style.setProperty('--p', (i / Math.max(words.length - 1, 1)).toFixed(3)));
+  });
+})();
