@@ -405,3 +405,17 @@ document.querySelectorAll('.project-embed').forEach(details => {
   const sec = document.querySelector('.fl-sec');
   if (sec) { const f = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Rome', second: '2-digit' }); const set = () => { sec.textContent = ':' + f.format(new Date()).padStart(2, '0'); }; set(); setInterval(set, 1000); }
 })();
+
+
+// Hover preview on names in About: the work appears near the cursor (mouse only).
+(() => {
+  if (!matchMedia('(pointer: fine)').matches) return;
+  const links = document.querySelectorAll('[data-preview]'); if (!links.length) return;
+  const box = document.createElement('div'); box.className = 'hover-preview'; box.innerHTML = '<img alt="">'; document.body.append(box);
+  const img = box.querySelector('img');
+  links.forEach(a => {
+    a.addEventListener('mouseenter', () => { img.src = a.dataset.preview; box.classList.add('is-in'); });
+    a.addEventListener('mouseleave', () => box.classList.remove('is-in'));
+    a.addEventListener('mousemove', e => { box.style.transform = `translate(${e.clientX + 18}px, ${e.clientY - 40}px)`; });
+  });
+})();
