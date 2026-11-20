@@ -428,3 +428,19 @@ document.querySelectorAll('.project-embed').forEach(details => {
     v.addEventListener('playing', done); v.addEventListener('canplay', done);
   });
 })();
+
+
+// Work: hovering a year tells how many projects that year. 404: a random project.
+(() => {
+  const years = [...document.querySelectorAll('.archive-item[data-cat] .archive-year')];
+  if (years.length) {
+    const count = {}; years.forEach(y => { const k = y.textContent.trim(); count[k] = (count[k] || 0) + 1; });
+    years.forEach(y => {
+      const k = y.textContent.trim(), row = y.closest('.archive-item');
+      row.addEventListener('mouseenter', () => { y.textContent = `${k} · ${count[k]} project${count[k] > 1 ? 's' : ''}`; });
+      row.addEventListener('mouseleave', () => { y.textContent = k; });
+    });
+  }
+  const take = document.querySelector('.take-me');
+  if (take) take.addEventListener('click', e => { const pool = take.dataset.pool.split(' '); e.preventDefault(); location.href = '/' + pool[Math.floor(Math.random() * pool.length)]; });
+})();
