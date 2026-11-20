@@ -179,7 +179,7 @@ document.querySelectorAll('.project-embed').forEach(details => {
   const video = hero.querySelector('video'), btn = hero.querySelector('.hero-film-toggle'), name = hero.querySelector('.hero-name');
   document.body.classList.add('js-film');
   let i = 0;
-  name.setAttribute('aria-label', name.textContent.replace(/\s+/g, ' ').trim());
+  name.setAttribute('aria-label', [...name.querySelectorAll('.hn')].map(w => w.textContent.trim()).join(' '));
   name.querySelectorAll('.hn').forEach(word => {
     const text = word.textContent; word.textContent = ''; word.setAttribute('aria-hidden', 'true');
     [...text].forEach(ch => { const s = document.createElement('span'); s.className = 'ho-char'; s.textContent = ch; s.style.setProperty('--i', i++); word.append(s); });
@@ -269,4 +269,88 @@ document.querySelectorAll('.project-embed').forEach(details => {
       .then(r => { if (!r.ok) throw new Error(r.status); form.classList.add('is-done'); note.textContent = 'Fatto. Ti scrivo appena aprono le iscrizioni.'; })
       .catch(() => { btn.disabled = false; note.textContent = 'Qualcosa non ha funzionato. Riprova, o scrivimi a mattia.giannattasio@gmail.com.'; });
   });
+})();
+
+// Footer details: the light in Parma now, the weather, time spent here, last update.
+(() => {
+  const light = document.querySelector('.sun-line'), wx = document.querySelector('.wx-line');
+  const visit = document.querySelector('.visit-line'), upd = document.querySelector('.updated-line');
+  const lat = 44.8015, lng = 10.3279, rad = Math.PI / 180;
+  // Sun elevation (NOAA approximation) for the current moment in Parma.
+  const elevation = now => {
+    const start = Date.UTC(now.getUTCFullYear(), 0, 0), day = Math.floor((now - start) / 864e5);
+    const hour = now.getUTCHours() + now.getUTCMinutes() / 60;
+    const g = 2 * Math.PI / 365 * (day - 1 + (hour - 12) / 24);
+    const eq = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+    const decl = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+    const tst = hour * 60 + eq + 4 * lng, ha = (tst / 4 - 180) * rad;
+    const cosZ = Math.sin(lat * rad) * Math.sin(decl) + Math.cos(lat * rad) * Math.cos(decl) * Math.cos(ha);
+    return 90 - Math.acos(Math.min(1, Math.max(-1, cosZ))) / rad;
+  };
+  const lightWord = e => e > 6 ? 'daylight' : e > -4 ? 'golden hour' : e > -6 ? 'blue hour' : 'night';
+  if (light) { const set = () => { light.textContent = lightWord(elevation(new Date())); light.hidden = false; }; set(); setInterval(set, 60000); }
+  // Weather from Open-Meteo (no key, no cookies), cached for 15 minutes.
+  if (wx) {
+    const words = c => c === 0 ? 'clear' : c <= 2 ? 'partly cloudy' : c === 3 ? 'cloudy' : c <= 48 ? 'fog' : c <= 57 ? 'drizzle' : c <= 67 ? 'rain' : c <= 77 ? 'snow' : c <= 82 ? 'showers' : c <= 86 ? 'snow' : 'storm';
+    const show = d => { wx.textContent = `${Math.round(d.t)}°, ${words(d.c)}`; wx.hidden = false; };
+    let cached = null; try { cached = JSON.parse(sessionStorage.getItem('mg-wx') || 'null'); } catch (e) {}
+    if (cached && Date.now() - cached.at < 9e5) show(cached);
+    else fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,weather_code&timezone=Europe%2FRome`)
+      .then(r => r.ok ? r.json() : Promise.reject()).then(j => {
+        const d = { t: j.current.temperature_2m, c: j.current.weather_code, at: Date.now() };
+        try { sessionStorage.setItem('mg-wx', JSON.stringify(d)); } catch (e) {}
+        show(d);
+      }).catch(() => {});
+  }
+  // Time spent on the site in this visit, in primes.
+  if (visit) {
+    let start = Date.now(); try { start = +sessionStorage.getItem('mg-visit') || start; sessionStorage.setItem('mg-visit', start); } catch (e) {}
+    const tick = () => { const s = Math.floor((Date.now() - start) / 1000), m = Math.floor(s / 60); visit.textContent = `You’ve been here ${m ? m + '′' : ''}${String(s % 60).padStart(m ? 2 : 1, '0')}″.`; visit.hidden = false; };
+    tick(); setInterval(tick, 1000);
+  }
+  // Last update of the site.
+  if (upd) {
+    const d = new Date(upd.dataset.updated + 'T12:00:00'), days = Math.round((Date.now() - d) / 864e5);
+    upd.textContent = `Updated ${days <= 0 ? 'today' : days === 1 ? 'yesterday' : days + ' days ago'}.`; upd.hidden = false;
+  }
+})();
+
+
+// Small wonders (2026-11-20).
+(() => {
+  const ago = ms => { const m = Math.round(ms / 6e4), h = Math.round(ms / 36e5), d = Math.round(ms / 864e5);
+    return m < 60 ? `${m} minutes ago` : h < 24 ? (h === 1 ? 'an hour ago' : `${h} hours ago`) : d === 1 ? 'yesterday' : `${d} days ago`; };
+  // 1. Welcome back, between the two words of the name, after the name has arrived. Only for people who come back.
+  let last = 0; try { last = +localStorage.getItem('mg-last-visit') || 0; } catch (e) {}
+  const welcome = document.querySelector('.hero-welcome');
+  if (welcome && last && Date.now() - last > 30 * 6e4) {
+    const ms = Date.now() - last, h = ms / 36e5, d = Math.round(ms / 864e5);
+    welcome.textContent = h < 12 ? 'back already? i like that.'
+      : d <= 1 ? 'oh hi, you were here yesterday.'
+      : d < 7 ? `oh hi again. it’s been ${d} days.`
+      : d < 60 ? `look who’s back. ${Math.round(d / 7)} week${Math.round(d / 7) > 1 ? 's' : ''} since your last visit.`
+      : 'it’s been a while. welcome back.';
+    welcome.hidden = false;
+  }
+  const mark = () => { try { localStorage.setItem('mg-last-visit', Date.now()); } catch (e) {} };
+  addEventListener('pagehide', mark); document.addEventListener('visibilitychange', () => { if (document.hidden) mark(); });
+  // 2. The visitor's time next to Parma's.
+  const you = document.querySelector('.fl-you');
+  if (you) {
+    const here = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const fmt = tz => new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit' }).format(new Date());
+    const set = () => {
+      const a = fmt(here), b = fmt('Europe/Rome');
+      you.textContent = a === b ? 'Same time where you are.' : `It’s ${a} where you are.`; you.hidden = false;
+    };
+    set(); setInterval(set, 30000);
+  }
+  // 3. Frame counter on the home film.
+  const fr = document.querySelector('.hero-frames'), vid = document.querySelector('.hero-film video');
+  if (fr && vid) {
+    const fps = 30;
+    const draw = () => { if (vid.duration) { fr.textContent = `frame ${Math.floor(vid.currentTime * fps) + 1} / ${Math.floor(vid.duration * fps)}`; fr.hidden = false; } };
+    if ('requestVideoFrameCallback' in vid) { const loop = () => { draw(); vid.requestVideoFrameCallback(loop); }; vid.requestVideoFrameCallback(loop); }
+    else { const loop = () => { draw(); requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+  }
 })();

@@ -8,10 +8,10 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="preload" href="fonts/timeless-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
-  <script src="site.js?v=20261120m" defer></script>
-  <script src="motion.js?v=20261120m" defer></script>
-  <link rel="stylesheet" href="site.css?v=20261120m">
-  <link rel="stylesheet" href="motion.css?v=20261120m">
+  <script src="site.js?v=20261120s" defer></script>
+  <script src="motion.js?v=20261120s" defer></script>
+  <link rel="stylesheet" href="site.css?v=20261120s">
+  <link rel="stylesheet" href="motion.css?v=20261120s">
 
   <link rel="canonical" href="https://mattiagiannattasio.com/mymind">
   <meta property="og:type" content="article">
@@ -77,7 +77,6 @@
       <nav class="site-nav" aria-label="Main navigation">
         <a class="nav-primary" href="projects.html" aria-current="page">Work</a>
         <a class="nav-primary" href="the-creative-lens.html">Newsletter</a>
-        <a class="nav-secondary" href="shop.html">Shop</a>
         <a class="nav-secondary" href="workshops.html">Workshop</a>
       </nav>
       <button class="menu-toggle" type="button" aria-label="Open navigation" aria-haspopup="dialog" aria-controls="mobile-menu" aria-expanded="false"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M2 6h16M2 14h16" stroke="currentColor" stroke-width="1"/></svg></button>
@@ -90,7 +89,6 @@
     <nav aria-label="Mobile navigation">
       <a href="projects.html" aria-current="page"><span>Work</span></a>
       <a href="the-creative-lens.html"><span>Newsletter</span></a>
-      <a href="shop.html"><span>Shop</span></a>
       <a href="workshops.html"><span>Workshop</span></a>
       <a href="about.html"><span>About</span></a>
       <a href="mailto:mattia.giannattasio@gmail.com"><span>Contact</span></a>
@@ -115,10 +113,19 @@
           <button type="submit">Subscribe</button><p class="subscribe-note" aria-live="polite"></p>
         </form>
     </div>
-    <div class="shell footer-inner">
-      <p class="footer-copy">© 2026 Mattia Giannattasio. All Rights Reserved. <span class="footer-colophon">Set in Timeless Sans. Made in Parma.</span></p><p class="local-time"><span class="footer-status">Available for new projects</span><span>Parma</span> <span class="local-digits"><span data-hh>--</span><span class="colon">:</span><span data-mm>--</span></span></p>
+    <div class="shell footer-inner footer-live">
+      <div class="fl-now">
+        <p class="local-time fl-place"><span class="fl-city">Parma</span> <span class="local-digits"><span data-hh>--</span><span class="colon">:</span><span data-mm>--</span></span></p>
+        <p class="fl-sky"><span class="sun-line" hidden></span><span class="wx-line" hidden></span></p>
+        <p class="fl-you" hidden></p>
+      </div>
+      <div class="fl-meta">
+        <p class="fl-status"><span class="footer-status">Available for new projects</span></p>
+        <p class="visit-line" hidden></p>
+      </div>
       <div class="footer-links"><a href="https://www.instagram.com/mattia_giannattasio/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://www.youtube.com/@mattia_giannattasio/featured" target="_blank" rel="noopener noreferrer">YouTube</a><a href="https://giannattasiomattia.substack.com" target="_blank" rel="noopener noreferrer">Substack</a></div>
       <a class="text-link" href="mailto:mattia.giannattasio@gmail.com">Email <span aria-hidden="true">↗</span></a>
+      <p class="footer-copy">© 2026 Mattia Giannattasio. <span class="footer-colophon">Set in Timeless Sans. Made in Parma.</span> <span class="updated-line" data-updated="2026-11-20" hidden></span></p>
     </div>
   </footer>
 </body>
