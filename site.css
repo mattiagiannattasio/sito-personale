@@ -551,3 +551,19 @@ main { min-height: calc(100svh - 160px); }
 .shop-study { max-width:520px; }
 .shop-study figcaption { margin-top:16px; color:var(--muted); font-size:12px; line-height:18px; }
 .shop-study figcaption a, .newsletter-details .inline-link { text-decoration:underline; text-decoration-color:#0003; text-underline-offset:3px; }
+
+/* ---- Details, November 2026 (design system: Details) ---- */
+p, .hero-intro, .work-summary, .article-deck { text-wrap: pretty; }
+.index-number { display: inline-block; margin-right: 12px; color: var(--muted); font-weight: 400; letter-spacing: 0; font-variant-numeric: tabular-nums; }
+.count { color: var(--muted); font-variant-numeric: tabular-nums; }
+.archive-year { font-variant-numeric: tabular-nums; }
+[data-ph] { background-color: var(--ph, #f3f3f3); }
+.local-time { grid-column: 2; grid-row: 2; justify-self: end; margin: 0; color: var(--muted); font-size: 11px; line-height: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.local-time .local-digits { color: #000; }
+.local-time .colon { animation: mg-colon 1s steps(1, end) infinite; }
+@keyframes mg-colon { 50% { opacity: .2; } }
+.footer-inner:has(.local-time) .footer-copy { grid-column: 1; }
+@media (max-width: 900px) {
+  .local-time { grid-column: 1; grid-row: 4; justify-self: start; }
+}
+@media (prefers-reduced-motion: reduce) { .local-time .colon { animation: none; } }

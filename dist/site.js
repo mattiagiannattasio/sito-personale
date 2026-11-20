@@ -126,3 +126,13 @@ document.querySelectorAll('.project-embed').forEach(details => {
     if (details.open && frame && !frame.hasAttribute('src')) frame.src = frame.dataset.projectEmbed;
   });
 });
+
+// Local time in the footer: Parma, updated every 15 seconds.
+(() => {
+  const el = document.querySelector('.local-time');
+  if (!el) return;
+  const hh = el.querySelector('[data-hh]'), mm = el.querySelector('[data-mm]');
+  const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit', hour12: false });
+  const tick = () => { const p = fmt.formatToParts(new Date()); hh.textContent = p.find(x => x.type === 'hour').value; mm.textContent = p.find(x => x.type === 'minute').value; };
+  tick(); setInterval(tick, 15000);
+})();
