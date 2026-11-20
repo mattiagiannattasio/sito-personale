@@ -797,3 +797,4 @@ p, .hero-intro, .work-summary, .article-deck { text-wrap: pretty; }
   .together-inner { margin-left: 24px; margin-right: 24px; }
 }
 .home-page .work-zone { padding-bottom: var(--space-section); }
+.home-page .work-zone { padding-top: var(--space-section); }
