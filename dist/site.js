@@ -136,3 +136,19 @@ document.querySelectorAll('.project-embed').forEach(details => {
   const tick = () => { const p = fmt.formatToParts(new Date()); hh.textContent = p.find(x => x.type === 'hour').value; mm.textContent = p.find(x => x.type === 'minute').value; };
   tick(); setInterval(tick, 15000);
 })();
+
+// Work page: Grid / Index view, remembered per visitor.
+(() => {
+  const toggle = document.querySelector('.work-view');
+  if (!toggle) return;
+  const main = document.querySelector('main');
+  const set = view => {
+    main.classList.toggle('is-grid', view === 'grid');
+    toggle.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+    try { localStorage.setItem('mg-work-view', view); } catch (e) {}
+  };
+  let saved = 'index';
+  try { saved = localStorage.getItem('mg-work-view') || 'index'; } catch (e) {}
+  set(saved);
+  toggle.addEventListener('click', e => { const b = e.target.closest('button'); if (b) set(b.dataset.view); });
+})();

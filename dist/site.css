@@ -567,3 +567,22 @@ p, .hero-intro, .work-summary, .article-deck { text-wrap: pretty; }
   .local-time { grid-column: 1; grid-row: 4; justify-self: start; }
 }
 @media (prefers-reduced-motion: reduce) { .local-time .colon { animation: none; } }
+
+/* ---- Details 2: tabular figures, view toggle, grid view of Work ---- */
+.credit-row > span, .related-link span, .archive-year, .film-caption { font-variant-numeric: tabular-nums; }
+.meta-prefix { margin-right: .25em; color: var(--muted); font-size: 11px; }
+.archive:has(.work-view) { position: relative; }
+.view-toggle { position: absolute; top: 0; right: 0; display: inline-flex; gap: .4em; align-items: baseline; color: var(--muted); font-size: 12px; line-height: 18px; letter-spacing: 0; }
+.view-toggle button { padding: 0; border: 0; background: none; color: var(--muted); font: inherit; cursor: pointer; transition: color .2s; }
+.view-toggle button[aria-pressed="true"], .view-toggle button:hover { color: #000; }
+.is-grid .archive:has(.archive-item) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; row-gap: 44px; }
+.is-grid .archive:has(.archive-item) > :not(.archive-item) { grid-column: 1 / -1; }
+.is-grid .archive:has(.archive-item) > .archive-section-title { margin-bottom: -28px; }
+.is-grid .archive .archive-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto auto; gap: 6px 16px; min-height: 0; padding: 0; border-top: 0; align-items: baseline; }
+.is-grid .archive .archive-item .archive-thumb { grid-column: 1 / -1; grid-row: 1; width: 100%; margin: 0 0 10px; }
+.is-grid .archive .archive-item .archive-title { grid-column: 1; grid-row: 2; align-self: baseline; }
+.is-grid .archive .archive-item .archive-type { grid-column: 1; grid-row: 3; }
+.is-grid .archive .archive-item .archive-year { grid-column: 2; grid-row: 2; align-self: baseline; }
+@media (max-width: 620px) { .is-grid .archive:has(.archive-item) { grid-template-columns: minmax(0, 1fr); } }
+/* Images that declare their size keep their ratio while loading (zero specificity). */
+:where(img[width][height]) { height: auto; }
