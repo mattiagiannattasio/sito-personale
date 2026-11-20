@@ -650,7 +650,7 @@ p, .hero-intro, .work-summary, .article-deck { text-wrap: pretty; }
 
 /* Home hero: the studio, filmed, full screen. The name arrives after the film has had a moment.
    Scrolling leaves the film and enters the site. */
-.home-page .home-hero.has-film { position: relative; display: block; width: 100%; height: 100svh; min-height: 520px; margin: 0; padding: 0; overflow: hidden; color: #fff; background: #2b2724; }
+.home-page .home-hero.has-film { position: relative; display: block; width: 100%; height: 100vh; height: 100svh; min-height: 520px; margin: 0; padding: 0; overflow: hidden; color: #fff; background: #2b2724; }
 .hero-film { position: absolute; inset: 0; margin: 0; }
 .hero-film video { display: block; width: 100%; height: 100%; object-fit: cover; }
 .hero-film::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, #00000073 0%, #00000026 28%, #00000014 60%, #0000002e 100%); pointer-events: none; }
@@ -665,8 +665,8 @@ p, .hero-intro, .work-summary, .article-deck { text-wrap: pretty; }
 /* Arrival: letters rise one by one, then the foot line. Without JS or with reduced motion everything is simply there. */
 .hero-name .ho-char { display: inline-block; }
 @media (prefers-reduced-motion: no-preference) {
-  .hero-name .ho-char { animation: ho-rise 1100ms var(--ease-settle) calc(1500ms + var(--i) * 38ms) both; }
-  .js-film .hero-foot > * { animation: ho-fade 900ms var(--ease-settle) 2500ms both; }
+  .hero-name .ho-char { animation: ho-rise 1300ms var(--ease-settle) calc(3600ms + var(--i) * 42ms) both; }
+  .js-film .hero-foot > * { animation: ho-fade 900ms var(--ease-settle) 5000ms both; }
 }
 @keyframes ho-rise { from { opacity: 0; transform: translateY(.18em); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes ho-fade { from { opacity: 0; } to { opacity: 1; } }
