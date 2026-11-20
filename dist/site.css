@@ -600,3 +600,6 @@ p, .hero-intro, .work-summary, .article-deck { text-wrap: pretty; }
 /* Superscript count on Work, colophon after the copyright. */
 .nav-count { margin-left: 1px; font-size: 9px; line-height: 0; vertical-align: super; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: 0; }
 .footer-colophon { color: var(--muted); }
+/* Availability: open-ended, no date to go stale. Sits before the local time. */
+.footer-status { display: inline-flex; align-items: center; gap: 7px; margin-right: 24px; color: var(--muted); }
+.footer-status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #66715b; }
