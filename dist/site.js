@@ -345,14 +345,6 @@ document.querySelectorAll('.project-embed').forEach(details => {
     };
     set(); setInterval(set, 30000);
   }
-  // 3. Frame counter on the home film.
-  const fr = document.querySelector('.hero-frames'), vid = document.querySelector('.hero-film video');
-  if (fr && vid) {
-    const fps = 30;
-    const draw = () => { if (vid.duration) { fr.textContent = `frame ${Math.floor(vid.currentTime * fps) + 1} / ${Math.floor(vid.duration * fps)}`; fr.hidden = false; } };
-    if ('requestVideoFrameCallback' in vid) { const loop = () => { draw(); vid.requestVideoFrameCallback(loop); }; vid.requestVideoFrameCallback(loop); }
-    else { const loop = () => { draw(); requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
-  }
 })();
 
 
@@ -417,5 +409,22 @@ document.querySelectorAll('.project-embed').forEach(details => {
     a.addEventListener('mouseenter', () => { img.src = a.dataset.preview; box.classList.add('is-in'); });
     a.addEventListener('mouseleave', () => box.classList.remove('is-in'));
     a.addEventListener('mousemove', e => { box.style.transform = `translate(${e.clientX + 18}px, ${e.clientY - 40}px)`; });
+  });
+})();
+
+
+// LoadCounter: films on project pages count 0 to 100 while they load, instead of a spinner.
+(() => {
+  document.querySelectorAll('.article-video video').forEach(v => {
+    const fig = v.closest('figure'); if (!fig) return;
+    const c = document.createElement('span'); c.className = 'load-counter'; c.setAttribute('aria-hidden', 'true'); c.hidden = true; fig.append(c);
+    let n = 0, timer = null, target = 0;
+    const tick = () => { n += Math.max(1, Math.round((target - n) / 6)); if (n > target) n = target; c.textContent = String(n).padStart(3, '0'); if (n < 100) timer = setTimeout(tick, 40); else setTimeout(() => { c.hidden = true; }, 350); };
+    const buffered = () => { try { return v.duration ? Math.round(v.buffered.end(v.buffered.length - 1) / v.duration * 100) : 0; } catch (e) { return 0; } };
+    const start = () => { if (v.readyState >= 3) return; c.hidden = false; target = Math.max(target, Math.min(90, buffered() + 30)); clearTimeout(timer); tick(); };
+    const done = () => { if (c.hidden) return; target = 100; clearTimeout(timer); tick(); };
+    v.addEventListener('play', start); v.addEventListener('waiting', start);
+    v.addEventListener('progress', () => { if (!c.hidden) target = Math.max(target, Math.min(95, buffered())); });
+    v.addEventListener('playing', done); v.addEventListener('canplay', done);
   });
 })();
