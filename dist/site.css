@@ -647,3 +647,75 @@ p, .hero-intro, .work-summary, .article-deck { text-wrap: pretty; }
   .page-intro h1.display { margin-bottom: 20px; }
 }
 @media (max-width: 620px) { .statement-band .shell { width: calc(100% - 48px); } }
+
+/* Home hero: the studio, filmed, full screen. The name arrives after the film has had a moment.
+   Scrolling leaves the film and enters the site. */
+.home-page .home-hero.has-film { position: relative; display: block; width: 100%; height: 100svh; min-height: 520px; margin: 0; padding: 0; overflow: hidden; color: #fff; background: #2b2724; }
+.hero-film { position: absolute; inset: 0; margin: 0; }
+.hero-film video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hero-film::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, #00000073 0%, #00000026 28%, #00000014 60%, #0000002e 100%); pointer-events: none; }
+.hero-over { position: absolute; inset: 0; display: grid; grid-template-rows: 1fr auto; padding: 0 var(--site-gutter) 22px; }
+.hero-name { align-self: center; margin: 0; display: flex; flex-direction: column; align-items: center; font-size: clamp(64px, 12.2vw, 236px); line-height: .84; font-weight: 500; letter-spacing: -.075em; text-align: center; text-shadow: 0 0 60px #0000002e; }
+.hero-name .hn { display: block; white-space: nowrap; }
+.hero-foot { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--home-grid-gap); align-items: end; }
+.hf-role { grid-column: 1 / 4; margin: 0; font-size: 12px; line-height: 18px; color: #ffffffb8; }
+.hf-intro { grid-column: 5 / 9; margin: 0; max-width: 420px; font-size: 14px; line-height: 22px; }
+.hero-film-toggle { grid-column: 12 / 13; justify-self: end; padding: 6px 4px; margin: 0 -4px -6px 0; border: 0; background: none; color: #fff; font: inherit; font-size: 11px; line-height: 16px; letter-spacing: 0; opacity: .72; cursor: pointer; transition: opacity var(--control-time); }
+.hero-film-toggle:hover, .hero-film-toggle:focus-visible { opacity: 1; }
+/* Arrival: letters rise one by one, then the foot line. Without JS or with reduced motion everything is simply there. */
+.hero-name .ho-char { display: inline-block; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-name .ho-char { animation: ho-rise 1100ms var(--ease-settle) calc(1500ms + var(--i) * 38ms) both; }
+  .js-film .hero-foot > * { animation: ho-fade 900ms var(--ease-settle) 2500ms both; }
+}
+@keyframes ho-rise { from { opacity: 0; transform: translateY(.18em); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes ho-fade { from { opacity: 0; } to { opacity: 1; } }
+/* Header turns white while it sits on the film. */
+.home-page:not(.past-film) .site-header { color: #fff; }
+.home-page:not(.past-film) .site-header::before { opacity: 0; }
+.home-page:not(.past-film) .site-nav .nav-secondary:not([aria-current]), .home-page:not(.past-film) .nav-count { color: #ffffffb8; }
+.site-header, .site-header::before { transition: color .4s var(--ease-settle), opacity .4s var(--ease-settle); }
+@media (max-width: 900px) {
+  .hf-role { grid-column: 1 / -1; grid-row: 1; }
+  .hf-intro { grid-column: 1 / 10; grid-row: 2; }
+  .hero-film-toggle { grid-column: 10 / 13; grid-row: 2; }
+}
+@media (max-width: 620px) {
+  .hero-name { font-size: 15.4vw; line-height: .86; }
+  .hero-over { padding: 0 24px 18px; }
+  .hf-intro { grid-column: 1 / 11; }
+  .hero-film-toggle { grid-column: 11 / 13; }
+}
+
+/* ==========================================================================
+   Breathing room (design system 2026-11-20). Space gives things importance.
+   Three steps only: section (between chapters), block (between a title and what it
+   introduces, between items of a grid), tight (inside a list). Never less on mobile
+   than half of desktop.
+   ========================================================================== */
+:root { --space-section: clamp(120px, 13vw, 208px); --space-block: clamp(48px, 5vw, 80px); --space-tight: 14px; --content-space: var(--space-section); }
+.statement-band { padding-block: var(--space-section) var(--space-section); }
+.work-zone, .engagements-section, .mailing-band { padding-block: 0 var(--space-section); }
+.section-head { margin-bottom: var(--space-block); }
+.work-grid { column-gap: clamp(40px, 4vw, 64px); row-gap: var(--space-block); }
+.page-intro, .newsletter-hero, .shop-intro { padding-top: calc(var(--site-top) + 160px); padding-bottom: var(--space-block); }
+.article-head { padding-top: calc(var(--site-top) + 140px); padding-bottom: var(--space-block); }
+.about-page .reading-column { padding-top: calc(var(--site-top) + 160px); }
+.about-page .content-section, .shop-page .content-section { margin-bottom: var(--space-section); }
+.about-introduction { margin-bottom: var(--space-block); }
+.archive { margin-bottom: var(--space-section); }
+.archive-section-title { margin-bottom: var(--space-block); }
+.archive-item { padding-block: 32px; }
+.related-inner { padding-top: var(--space-block); }
+.site-footer { padding: var(--space-block) 0 40px; }
+.hero-over { padding-bottom: 32px; }
+@media (max-width: 900px) {
+  .page-intro, .article-head, .newsletter-hero, .shop-intro, .about-page .reading-column { padding-top: 160px; }
+}
+@media (max-width: 620px) {
+  :root { --space-section: 112px; --space-block: 48px; --content-space: var(--space-section); }
+  .page-intro, .article-head, .newsletter-hero, .shop-intro, .about-page .reading-column { padding-top: 140px; }
+  .statement-band { padding-block: 96px var(--space-section); }
+  .archive-item { padding-block: 24px; }
+  .hero-over { padding-bottom: 24px; }
+}

@@ -10,11 +10,11 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="preload" href="fonts/timeless-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
-  <script src="site.js?v=20261120e" defer></script>
-  <script src="motion.js?v=20261120e" defer></script>
-  <link rel="stylesheet" href="site.css?v=20261120e">
-  <link rel="stylesheet" href="shop.css?v=20261120e">
-  <link rel="stylesheet" href="motion.css?v=20261120e">
+  <script src="site.js?v=20261120h" defer></script>
+  <script src="motion.js?v=20261120h" defer></script>
+  <link rel="stylesheet" href="site.css?v=20261120h">
+  <link rel="stylesheet" href="shop.css?v=20261120h">
+  <link rel="stylesheet" href="motion.css?v=20261120h">
 
   <link rel="canonical" href="https://mattiagiannattasio.com/">
   <meta property="og:type" content="website">
@@ -114,29 +114,19 @@
   </dialog>
 
   <main id="main-content">
-    <section class="shell home-hero" aria-labelledby="home-title">
-      <div class="hero-wordmark">
-        <h1 id="home-title">
-          <span class="hero-first-name">Mattia</span>
-          <span class="hero-reel" aria-hidden="true" style="--reel-ratio: 1.699;">
-            <img class="is-active" src="assets/hero-reel/hero-01.webp" alt="" width="476" height="280" data-ratio="1.699" fetchpriority="high" decoding="async">
-            <img src="assets/hero-reel/hero-02.webp" alt="" width="216" height="280" data-ratio="0.772" decoding="async">
-            <img src="assets/hero-reel/hero-03.webp" alt="" width="498" height="280" data-ratio="1.779" decoding="async">
-            <img src="assets/hero-reel/hero-04.webp" alt="" width="280" height="280" data-ratio="0.999" decoding="async">
-            <img src="assets/hero-reel/hero-05.webp" alt="" width="373" height="280" data-ratio="1.333" decoding="async">
-            <img src="assets/hero-reel/hero-06.webp" alt="" width="210" height="280" data-ratio="0.750" decoding="async">
-            <img src="assets/hero-reel/hero-07.webp" alt="" width="211" height="280" data-ratio="0.753" decoding="async">
-            <img src="assets/hero-reel/hero-08.webp" alt="" width="498" height="280" data-ratio="1.779" decoding="async">
-            <img src="assets/hero-reel/hero-09.webp" alt="" width="375" height="280" data-ratio="1.339" decoding="async">
-          </span>
-          <span class="hero-last-name">Giannattasio</span>
-        </h1>
-      </div>
-      <div class="hero-copy">
-        <p class="hero-role">Filmmaker · Designer · Photographer</p>
-        <p class="hero-intro">Short films and visual campaigns for technology brands and cultural institutions.</p>
-        <div class="hero-actions">
-          <a class="button dark" href="projects.html">Explore my work <span aria-hidden="true">→</span></a>
+    <section class="home-hero has-film" aria-labelledby="home-title">
+      <figure class="hero-film">
+        <video autoplay muted loop playsinline preload="auto" poster="assets/hero/poster.webp" width="1920" height="1080" aria-label="Mattia at work in his studio">
+          <source src="assets/hero/hero-mobile.mp4" type="video/mp4" media="(max-width: 620px)">
+          <source src="assets/hero/hero-1920.mp4" type="video/mp4">
+        </video>
+      </figure>
+      <div class="hero-over">
+        <h1 class="hero-name" id="home-title"><span class="hn">Mattia</span> <span class="hn">Giannattasio</span></h1>
+        <div class="hero-foot">
+          <p class="hf-role">Filmmaker · Designer · Photographer</p>
+          <p class="hf-intro">Short films and visual campaigns for technology brands and cultural institutions.</p>
+          <button class="hero-film-toggle" type="button" aria-pressed="false">Pause</button>
         </div>
       </div>
     </section>

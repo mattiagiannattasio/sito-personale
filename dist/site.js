@@ -171,3 +171,26 @@ document.querySelectorAll('.project-embed').forEach(details => {
     words.forEach((w, i) => w.style.setProperty('--p', (i / Math.max(words.length - 1, 1)).toFixed(3)));
   });
 })();
+
+// Home film: pause control, reduced motion, rests off screen, white header while on the film, letters for the arrival.
+(() => {
+  const hero = document.querySelector('.home-hero.has-film');
+  if (!hero) return;
+  const video = hero.querySelector('video'), btn = hero.querySelector('.hero-film-toggle'), name = hero.querySelector('.hero-name');
+  document.body.classList.add('js-film');
+  let i = 0;
+  name.setAttribute('aria-label', name.textContent.replace(/\s+/g, ' ').trim());
+  name.querySelectorAll('.hn').forEach(word => {
+    const text = word.textContent; word.textContent = ''; word.setAttribute('aria-hidden', 'true');
+    [...text].forEach(ch => { const s = document.createElement('span'); s.className = 'ho-char'; s.textContent = ch; s.style.setProperty('--i', i++); word.append(s); });
+  });
+  let userPaused = false;
+  const sync = () => { btn.textContent = video.paused ? 'Play' : 'Pause'; btn.setAttribute('aria-pressed', String(video.paused)); };
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { video.removeAttribute('autoplay'); video.pause(); userPaused = true; }
+  btn.addEventListener('click', () => { if (video.paused) { userPaused = false; video.play().catch(() => {}); } else { userPaused = true; video.pause(); } });
+  video.addEventListener('play', sync); video.addEventListener('pause', sync);
+  const header = () => document.body.classList.toggle('past-film', hero.getBoundingClientRect().bottom < 72);
+  addEventListener('scroll', header, { passive: true }); addEventListener('resize', header); header();
+  if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { if (userPaused) return; e.isIntersecting ? video.play().catch(() => {}) : video.pause(); }).observe(hero);
+  sync();
+})();
