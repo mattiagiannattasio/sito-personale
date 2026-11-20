@@ -39,7 +39,7 @@
 .shop-intro-bottom > p { grid-column: 1 / 6; max-width: 480px; margin: 0; font-size: clamp(1.2rem, 2.2vw, 2rem); line-height: 1.25; letter-spacing: -.035em; }
 .shop-status { grid-column: 9 / 13; justify-self: end; display: flex; gap: 10px; align-items: center; font-size: .875rem; }
 .shop-status::before { content: ''; width: 7px; height: 7px; flex-shrink: 0; border-radius: 50%; background: #526745; }
-.shop-release { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); padding-block: 28px clamp(65px, 8vw, 110px); border-top: 1px solid var(--line); }
+.shop-release { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); padding-block: 28px clamp(65px, 8vw, 110px); }
 .shop-release > .eyebrow { grid-column: 1 / 5; }
 .shop-release-copy { grid-column: 5 / 12; }
 .shop-release-copy h2 { max-width: 800px; margin: 0 0 22px; font-size: clamp(2.3rem, 5vw, 5.4rem); line-height: 1; font-weight: 500; letter-spacing: -.05em; }

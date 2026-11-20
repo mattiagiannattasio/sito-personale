@@ -586,3 +586,17 @@ p, .hero-intro, .work-summary, .article-deck { text-wrap: pretty; }
 @media (max-width: 620px) { .is-grid .archive:has(.archive-item) { grid-template-columns: minmax(0, 1fr); } }
 /* Images that declare their size keep their ratio while loading (zero specificity). */
 :where(img[width][height]) { height: auto; }
+
+/* Space, not rules (design system 2026-11-20): hierarchy comes from space, never from lines.
+   Rows of one list sit close; groups are separated by a larger gap. */
+.archive-item, .feature-item { border-top: 0; }
+.credit-row, .engagement-row, .related-link { border-bottom: 0; }
+.credit-row { padding: 12px 0; }
+.engagement-row, .related-link { padding: 14px 0; }
+.mailing-inner { border-top: 0; padding-top: 56px; }
+.footer-inner { border-top: 0; padding-top: 56px; }
+.mobile-menu nav a { border-top: 0; }
+@media (max-width: 620px) { .credit-row { padding: 12px 0; border-bottom: 0; } }
+/* Superscript count on Work, colophon after the copyright. */
+.nav-count { margin-left: 1px; font-size: 9px; line-height: 0; vertical-align: super; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.footer-colophon { color: var(--muted); }
