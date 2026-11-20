@@ -238,3 +238,35 @@ document.querySelectorAll('.project-embed').forEach(details => {
     });
   });
 })();
+
+// Latest film: the YouTube player loads only when asked.
+(() => {
+  document.querySelectorAll('.yt-frame[data-yt]').forEach(frame => {
+    const poster = frame.querySelector('.yt-poster');
+    const img = poster.querySelector('img');
+    img.addEventListener('error', () => { img.src = `https://i.ytimg.com/vi/${frame.dataset.yt}/hqdefault.jpg`; }, { once: true });
+    poster.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = `https://www.youtube-nocookie.com/embed/${frame.dataset.yt}?autoplay=1&rel=0&modestbranding=1&color=white`;
+      f.title = poster.getAttribute('aria-label').replace(/^Play /, '');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true;
+      frame.replaceChildren(f);
+    });
+  });
+})();
+
+// Workshop waiting list (Netlify Forms), confirmed in place.
+(() => {
+  const form = document.querySelector('form.ws-form');
+  if (!form) return;
+  const note = form.querySelector('.ws-note');
+  if (new URLSearchParams(location.search).has('grazie')) { form.classList.add('is-done'); note.textContent = 'Fatto. Ti scrivo appena aprono le iscrizioni.'; }
+  form.addEventListener('submit', e => {
+    if (!form.checkValidity()) return;
+    e.preventDefault();
+    const btn = form.querySelector('button'); btn.disabled = true;
+    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(new FormData(form)).toString() })
+      .then(r => { if (!r.ok) throw new Error(r.status); form.classList.add('is-done'); note.textContent = 'Fatto. Ti scrivo appena aprono le iscrizioni.'; })
+      .catch(() => { btn.disabled = false; note.textContent = 'Qualcosa non ha funzionato. Riprova, o scrivimi a mattia.giannattasio@gmail.com.'; });
+  });
+})();
