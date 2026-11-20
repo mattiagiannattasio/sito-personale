@@ -893,3 +893,20 @@ p, .hero-intro, .work-summary, .article-deck { text-wrap: pretty; }
 /* Welcome back: a micro detail sitting in the seam between the two words, taking no space. */
 .hero-welcome { position: relative; z-index: 1; height: 0; margin: 0; font-size: 9px; line-height: 0; letter-spacing: .02em; color: #ffffffb3; transform: translateY(-.05em); }
 @media (max-width: 620px) { .hero-welcome { font-size: 8px; } }
+/* Toasts and small notes. */
+.mg-toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 8px); z-index: 300; padding: 7px 12px; border-radius: .5714em; background: #000000d9; -webkit-backdrop-filter: blur(9.82px); backdrop-filter: blur(9.82px); color: #fff; font-size: 12px; line-height: 18px; letter-spacing: 0; opacity: 0; pointer-events: none; transition: opacity .3s var(--ease-settle), transform .4s var(--ease-settle); white-space: nowrap; }
+.mg-toast.at-cursor { bottom: auto; transform: translate(0, 6px); }
+.mg-toast.is-in { opacity: 1; transform: translate(-50%, 0); }
+.mg-toast.at-cursor.is-in { transform: none; }
+.film-thanks { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 18px; animation: ho-fade 900ms var(--ease-settle) both; }
+.footer-live .fl-late[hidden] { display: none; }
+.archive-end { width: min(var(--content), calc(100% - 48px)); margin: calc(var(--space-block) * -1) auto var(--space-section); color: var(--muted); font-size: 12px; line-height: 18px; }
+.visit-note { margin: -10px 0 18px; color: var(--muted); font-size: 12px; line-height: 18px; }
+.visit-note[hidden] { display: none; }
+.footer-live .fl-sec { display: inline-block; max-width: 0; overflow: hidden; vertical-align: bottom; color: var(--muted); transition: max-width .5s var(--ease-settle), opacity .4s; opacity: 0; }
+.footer-live .fl-place:hover .fl-sec { max-width: 2em; opacity: 1; }
+/* Printed pages say thank you. */
+@media print {
+  .site-header, .mobile-menu, .footer-subscribe, .hero-film, .mg-toast { display: none !important; }
+  body::after { content: "printed from mattiagiannattasio.com. thanks for keeping it on paper."; display: block; margin-top: 40px; font-size: 10pt; color: #666; }
+}

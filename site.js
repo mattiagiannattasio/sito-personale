@@ -200,7 +200,7 @@ document.querySelectorAll('.project-embed').forEach(details => {
       e.preventDefault(); btn.disabled = true;
       const body = new URLSearchParams({ email: input.value, first_url: location.href });
       fetch(form.action.replace('?nojs=true', ''), { method: 'POST', mode: 'no-cors', body })
-        .then(() => { form.classList.add('is-done'); note.textContent = 'Almost there. Check your inbox to confirm.'; })
+        .then(() => { form.classList.add('is-done'); note.textContent = 'Almost there. A confirm button is waiting in your inbox.'; })
         .catch(() => { btn.disabled = false; form.submit(); });
     });
   });
@@ -211,11 +211,11 @@ document.querySelectorAll('.project-embed').forEach(details => {
   document.querySelectorAll('[data-copy]').forEach(link => {
     const status = link.parentElement.querySelector('.copy-status');
     if (!window.matchMedia('(pointer: fine)').matches || !navigator.clipboard) return;
-    if (status) status.textContent = 'Click to copy';
+    if (status) status.textContent = 'click to copy, no mail app needed';
     link.addEventListener('click', e => {
       e.preventDefault();
       navigator.clipboard.writeText(link.dataset.copy).then(() => {
-        if (status) { status.textContent = 'Copied. Talk soon.'; setTimeout(() => { status.textContent = 'Click to copy'; }, 2600); }
+        if (status) { status.textContent = 'Copied. Talk soon.'; setTimeout(() => { status.textContent = 'click to copy, no mail app needed'; }, 2600); }
       }).catch(() => { location.href = link.href; });
     });
   });
@@ -353,4 +353,55 @@ document.querySelectorAll('.project-embed').forEach(details => {
     if ('requestVideoFrameCallback' in vid) { const loop = () => { draw(); vid.requestVideoFrameCallback(loop); }; vid.requestVideoFrameCallback(loop); }
     else { const loop = () => { draw(); requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
   }
+})();
+
+
+// More small wonders: right-click on work, the end of a film, copied words, late visitors.
+(() => {
+  const toast = (text, x, y) => {
+    const t = document.createElement('div'); t.className = 'mg-toast'; t.textContent = text;
+    if (x != null) { t.style.left = `${Math.min(x + 12, innerWidth - 180)}px`; t.style.top = `${y + 12}px`; t.classList.add('at-cursor'); }
+    document.body.append(t); requestAnimationFrame(() => t.classList.add('is-in'));
+    setTimeout(() => { t.classList.remove('is-in'); setTimeout(() => t.remove(), 400); }, 1800);
+  };
+  // 1. Right-click on a photo or a film: nothing is blocked, just a note.
+  document.addEventListener('contextmenu', e => { if (e.target.closest('img, video, .work-image, .archive-thumb')) toast('this one’s mine (:', e.clientX, e.clientY); });
+  // 2. A film watched to the end.
+  document.querySelectorAll('.article-video video').forEach(v => v.addEventListener('ended', () => {
+    const fig = v.closest('figure'); if (!fig || fig.querySelector('.film-thanks')) return;
+    const p = document.createElement('p'); p.className = 'film-thanks'; p.textContent = 'you watched it till the end. thank you.'; fig.append(p);
+  }));
+  // 4. Copied words.
+  document.addEventListener('copy', e => { if (e.target.closest && e.target.closest('input, textarea')) return; const sel = String(getSelection()); if (sel.trim().length > 12) toast('take it, just credit me (:'); });
+  // 5. Late visitors (their own time, between midnight and 5).
+  const late = document.querySelector('.fl-late');
+  if (late) { const h = new Date().getHours(); if (h < 5) { late.textContent = 'it’s late where you are. thanks for spending it here.'; late.hidden = false; } }
+})();
+
+
+// Even more: slow down, the third visit, seconds on the clock.
+(() => {
+  const toast = text => { const t = document.createElement('div'); t.className = 'mg-toast'; t.textContent = text; document.body.append(t); requestAnimationFrame(() => t.classList.add('is-in')); setTimeout(() => { t.classList.remove('is-in'); setTimeout(() => t.remove(), 400); }, 2200); };
+  // Scrolling the Work page too fast.
+  if (document.querySelector('.work-filter')) {
+    let lastY = scrollY, lastT = performance.now(), fast = 0, done = false;
+    addEventListener('scroll', () => {
+      if (done) return;
+      const now = performance.now(), v = Math.abs(scrollY - lastY) / Math.max(now - lastT, 1);
+      lastY = scrollY; lastT = now; fast = v > 4.5 ? fast + 1 : Math.max(0, fast - 1);
+      if (fast > 6) { done = true; toast('slow down, these are films (:'); }
+    }, { passive: true });
+  }
+  // Counting visits (one per browser session).
+  let visits = 0;
+  try { visits = +localStorage.getItem('mg-visits') || 0; if (!sessionStorage.getItem('mg-counted')) { visits += 1; localStorage.setItem('mg-visits', visits); sessionStorage.setItem('mg-counted', '1'); } } catch (e) {}
+  const note = document.querySelector('.visit-note');
+  if (note && visits >= 3) {
+    const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 - 20) % 10] || ['th', 'st', 'nd', 'rd'][n % 100] || 'th');
+    note.textContent = visits === 3 ? 'third time here. maybe we should talk.' : `${ord(visits)} time here. we should really talk.`;
+    note.hidden = false;
+  }
+  // Seconds appear when you hover the clock.
+  const sec = document.querySelector('.fl-sec');
+  if (sec) { const f = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Rome', second: '2-digit' }); const set = () => { sec.textContent = ':' + f.format(new Date()).padStart(2, '0'); }; set(); setInterval(set, 1000); }
 })();
