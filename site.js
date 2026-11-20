@@ -190,3 +190,51 @@ document.querySelectorAll('.project-embed').forEach(details => {
   const header = () => document.body.classList.toggle('past-film', hero.getBoundingClientRect().bottom < 72);
   addEventListener('scroll', header, { passive: true }); addEventListener('resize', header); header();
 })();
+
+// Subscribe forms: send to Substack in the background, confirm in place. Without JS the form posts to Substack directly.
+(() => {
+  document.querySelectorAll('form.subscribe').forEach(form => {
+    form.addEventListener('submit', e => {
+      const input = form.querySelector('input[type="email"]'), note = form.querySelector('.subscribe-note'), btn = form.querySelector('button');
+      if (!input.value || !input.checkValidity()) return;
+      e.preventDefault(); btn.disabled = true;
+      const body = new URLSearchParams({ email: input.value, first_url: location.href });
+      fetch(form.action.replace('?nojs=true', ''), { method: 'POST', mode: 'no-cors', body })
+        .then(() => { form.classList.add('is-done'); note.textContent = 'Almost there. Check your inbox to confirm.'; })
+        .catch(() => { btn.disabled = false; form.submit(); });
+    });
+  });
+})();
+
+// Copy the email on devices with a mouse; phones open the mail app.
+(() => {
+  document.querySelectorAll('[data-copy]').forEach(link => {
+    const status = link.parentElement.querySelector('.copy-status');
+    if (!window.matchMedia('(pointer: fine)').matches || !navigator.clipboard) return;
+    if (status) status.textContent = 'Click to copy';
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      navigator.clipboard.writeText(link.dataset.copy).then(() => {
+        if (status) { status.textContent = 'Copied. Talk soon.'; setTimeout(() => { status.textContent = 'Click to copy'; }, 2600); }
+      }).catch(() => { location.href = link.href; });
+    });
+  });
+})();
+
+// Work filters.
+(() => {
+  const bar = document.querySelector('.work-filter');
+  if (!bar) return;
+  const items = [...document.querySelectorAll('.archive-item[data-cat]')];
+  bar.addEventListener('click', e => {
+    const b = e.target.closest('button[data-filter]'); if (!b) return;
+    const f = b.dataset.filter;
+    bar.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    items.forEach(it => { it.hidden = f !== 'all' && !it.dataset.cat.split(' ').includes(f); });
+    document.querySelectorAll('.archive').forEach(sec => {
+      const visible = sec.querySelectorAll('.archive-item[data-cat]:not([hidden])').length;
+      sec.hidden = visible === 0;
+      const c = sec.querySelector('.archive-section-title .count'); if (c) c.textContent = `(${visible})`;
+    });
+  });
+})();
